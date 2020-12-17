@@ -8,18 +8,28 @@ import requests
 import time
 import random
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk,BOTTOM
 import threading
 
 def Datos(Ticker,simbol,root):
     page = requests.get('https://finance.yahoo.com/quote/'+Ticker+'/') 
     tree = html.fromstring(page.content) 
-    x="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[3]/div[1]/div/span"
+
+    x='/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[3]/div[1]/p/span'
+    #x="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[3]/div[1]/div/span"
     # Get element using XPath 
-    Num = tree.xpath(x+"[1]") 
-    Porcen = tree.xpath(x+"[2]") 
+    # detect premarket or market
+    if len(tree.xpath(x+"[1]")) > 0:
+        Num = tree.xpath(x+"[1]") 
+        Porcen = tree.xpath(x+"[2]/span") 
+    else:
+        x="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[3]/div[1]/div/span"
+        Num = tree.xpath(x+"[1]") 
+        Porcen = tree.xpath(x+"[2]") 
+
+    print(Num)
     print(Num[0].text)
-    print(Porcen[0].text.split(" "))
+    print(Porcen[0].text)
     values = Porcen[0].text.split(" ")
     porcent = float(values[1][1:-2])
 
@@ -51,11 +61,17 @@ def Datos(Ticker,simbol,root):
         
 def texttowrite(lista):
         
+        page = requests.get('https://finance.yahoo.com/quote/AAPL/') 
+        tree = html.fromstring(page.content) 
+        x='/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[3]/div[1]/p/span'
+        if len(tree.xpath(x+"[1]")) > 0:
+            AllText = ["🅿🆁🅴-🅼🅰🆁🅺🅴🆃:","ρ᥅ꫀ-ꪑꪖ᥅ᛕꫀꪻ:","𝓟𝓡𝓔-𝓜𝓐𝓡𝓚𝓔𝓣:","卩尺乇-爪卂尺Ҝ乇ㄒ:","[̲̅P][̲̅R][̲̅E][̲̅-][̲̅M][̲̅A][̲̅R][̲̅K][̲̅E][̲̅T][̲̅:]"]
+        else:
+            AllText = ["𝓜𝓪𝓻𝓴𝓮𝓽:","𝕄𝕒𝕣𝕜𝕖𝕥:","🄼🄰🅁🄺🄴🅃:","Ｍａｒｋｅｔ:","🅼🅰🆁🅺🅴🆃:","爪卂尺Ҝ乇ㄒ:"]
 
         simbol=['📈','🚀','📉','🔥','🔴','🟢']
 
-        AllText = ["🅿🆁🅴-🅼🅰🆁🅺🅴🆃:","ρ᥅ꫀ-ꪑꪖ᥅ᛕꫀꪻ:","𝓟𝓡𝓔-𝓜𝓐𝓡𝓚𝓔𝓣:","卩尺乇-爪卂尺Ҝ乇ㄒ:","[̲̅P][̲̅R][̲̅E][̲̅-][̲̅M][̲̅A][̲̅R][̲̅K][̲̅E][̲̅T][̲̅:]"]
-
+        
 
         var.set(AllText[random.randint(0,len(AllText)-1)]+"\n\n")
 
@@ -70,7 +86,7 @@ def boton(root,lista):
     texttowrite(lista)
     
     button = tk.Button(root, text="CopyClipboard", fg="red",command= lambda: copy(root))
-    button.pack()
+    button.grid(row=1,column=1)
 
 def copy(root):
     root.clipboard_clear()
@@ -78,28 +94,34 @@ def copy(root):
 
 def secondwin():
     lista = entry.get().split(",")
-    for y in lista:
-         var2 = tk.StringVar()
-         blog = tk.Label(root, textvariable=var2)
-         blog.pack()
-         listaTotal[y]=var2
+    for y in listaTotal:
+        listaTotal[y].set("")
+    for z in range(len(lista)):
+        y = lista[z]
+        if y not in listaTotal.keys():
+            var2 = tk.StringVar()
+            blog = tk.Label(root, textvariable=var2)
+            blog.grid(row=z+2,column=0)
+            listaLabels[y]=blog
+            listaTotal[y]=var2
     thread = threading.Thread(target=boton, args=(root,lista,))
     thread.start()
 
 def app():
 
-    global var,root,listaTotal,entry
-    
+    global var,root,listaTotal,entry,listaLabels
+    listaLabels = {}
     root = tk.Tk()
     root.title("TickerInfo")
     root.geometry("300x250")
     var = tk.StringVar()
+
     listaTotal = {}
     entry= tk.Entry(root)
-    entry.pack()
+    entry.grid(row=0,column=0)
     entry.insert(0,'TSLA,AAPL,AZN,AMD,CCL,NIO,CNK')
     button1 = tk.Button(root, text="Tickers", fg="red",command= secondwin)
-    button1.pack()
+    button1.grid(row=1,column=0)
 
     root.mainloop()
 app()
