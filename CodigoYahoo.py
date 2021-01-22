@@ -26,7 +26,7 @@ def Datos(Ticker,simbol,root):
         x="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[3]/div[1]/div/span"
         Num = tree.xpath(x+"[1]") 
         Porcen = tree.xpath(x+"[2]") 
-
+    print(Ticker)
     print(Num)
     print(Num[0].text)
     print(Porcen[0].text)
@@ -65,7 +65,7 @@ def texttowrite(lista):
         tree = html.fromstring(page.content) 
         x='/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[3]/div[1]/p/span'
         if len(tree.xpath(x+"[1]")) > 0:
-            AllText = ["🅿🆁🅴-🅼🅰🆁🅺🅴🆃:","ρ᥅ꫀ-ꪑꪖ᥅ᛕꫀꪻ:","𝓟𝓡𝓔-𝓜𝓐𝓡𝓚𝓔𝓣:","卩尺乇-爪卂尺Ҝ乇ㄒ:","[̲̅P][̲̅R][̲̅E][̲̅-][̲̅M][̲̅A][̲̅R][̲̅K][̲̅E][̲̅T][̲̅:]"]
+            AllText = ["🅿🆁🅴-🅼🅰🆁🅺🅴🆃:","ρ᥅ꫀ-ꪑꪖ᥅ᛕꫀꪻ:","𝓟𝓡𝓔-𝓜𝓐𝓡𝓚𝓔𝓣:","卩尺乇-爪卂尺Ҝ乇十:","[̲̅P][̲̅R][̲̅E][̲̅-][̲̅M][̲̅A][̲̅R][̲̅K][̲̅E][̲̅T][̲̅:]"]
         else:
             AllText = ["𝓜𝓪𝓻𝓴𝓮𝓽:","𝕄𝕒𝕣𝕜𝕖𝕥:","🄼🄰🅁🄺🄴🅃:","Ｍａｒｋｅｔ:","🅼🅰🆁🅺🅴🆃:","爪卂尺Ҝ乇ㄒ:"]
 
