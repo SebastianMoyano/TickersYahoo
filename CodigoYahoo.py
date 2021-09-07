@@ -14,8 +14,8 @@ import threading
 def Datos(Ticker,simbol,root):
     page = requests.get('https://finance.yahoo.com/quote/'+Ticker+'/') 
     tree = html.fromstring(page.content) 
-
-    x='/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[3]/div[1]/p/span'
+        #/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[5]/div/div/div/div[3]/div[1]/div/span[2]
+    x='/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[5]/div/div/div/div[3]/div[1]/p/span'
     #x="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[3]/div[1]/div/span"
     # Get element using XPath 
     # detect premarket or market
@@ -23,7 +23,7 @@ def Datos(Ticker,simbol,root):
         Num = tree.xpath(x+"[1]") 
         Porcen = tree.xpath(x+"[2]/span") 
     else:
-        x="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[3]/div[1]/div/span"
+        x="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[5]/div/div/div/div[3]/div[1]/div/span"
         Num = tree.xpath(x+"[1]") 
         Porcen = tree.xpath(x+"[2]") 
     print(Ticker)
